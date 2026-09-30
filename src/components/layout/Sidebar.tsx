@@ -6,6 +6,7 @@ import {
   Bot,
   BrainCircuit,
   Building2,
+  Camera,
   CheckSquare,
   Cpu,
   FileText,
@@ -57,6 +58,13 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
       heading: t.navGroups.predictiveAi,
       items: [
         { id: 'forecasts', label: t.nav.forecasts, icon: TrendingUp },
+        {
+          id: 'vertexPredictive',
+          label: 'Vertex AI Hub',
+          icon: Cpu,
+          badge: 'AutoML',
+          badgeColor: 'bg-indigo-600'
+        },
         { id: 'whatIfSimulator', label: t.nav.whatIfSimulator, icon: SlidersHorizontal },
         { id: 'emergencyCascade', label: t.nav.emergencyCascade, icon: GitBranch }
       ]
@@ -83,6 +91,13 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
     {
       heading: t.navGroups.federatedAi,
       items: [
+        {
+          id: 'communityVision',
+          label: 'Vision & Multimodal',
+          icon: Camera,
+          badge: 'VISION',
+          badgeColor: 'bg-cyan-500'
+        },
         {
           id: 'federatedIntelligence',
           label: t.nav.federatedIntelligence,

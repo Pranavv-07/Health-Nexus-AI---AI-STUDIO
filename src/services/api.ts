@@ -14,7 +14,9 @@ import {
   DigitalTwinSnapshot,
   UserRole,
   WhatIfScenarioInput,
-  WhatIfSimulationResult
+  WhatIfSimulationResult,
+  MultimodalAnalysisResult,
+  VertexAiModelInfo
 } from '../types.ts';
 
 const API_BASE = '/api';
@@ -197,4 +199,39 @@ export async function fetchDigitalTwinSnapshot(step: TimelineStep = 'TODAY'): Pr
   const res = await fetch(`${API_BASE}/digital-twin?step=${step}`);
   return res.json();
 }
+
+export async function fetchRecentMultimodalAnalyses(): Promise<MultimodalAnalysisResult[]> {
+  const res = await fetch(`${API_BASE}/multimodal/recent`);
+  return res.json();
+}
+
+export async function submitMultimodalAnalysis(data: {
+  imageBase64?: string;
+  mimeType?: string;
+  analysisType: 'citizen_hazard' | 'crop_disease' | 'pollution_monitoring';
+  location?: string;
+  phcId?: string;
+}): Promise<MultimodalAnalysisResult> {
+  const res = await fetch(`${API_BASE}/multimodal/analyze`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  });
+  return res.json();
+}
+
+export async function fetchVertexAiModels(): Promise<VertexAiModelInfo[]> {
+  const res = await fetch(`${API_BASE}/vertex-ai/models`);
+  return res.json();
+}
+
+export async function triggerVertexRetraining(modelId: string) {
+  const res = await fetch(`${API_BASE}/vertex-ai/simulate-retraining`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ modelId })
+  });
+  return res.json();
+}
+
 

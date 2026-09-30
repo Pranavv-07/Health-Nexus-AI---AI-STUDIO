@@ -26,6 +26,7 @@ import { getAiSystemHealth } from './aiSentinel.ts';
 import { getEdgeNodeState, setEdgeConnectivity, addEdgeOfflineAction, triggerEdgeSynchronization } from './edgeNode.ts';
 import { getActiveIncident, updateIncidentActionStatus, generateIncidentPostMortem } from './incidentCommander.ts';
 import { getCommunityImpactMetrics, getJudgeScorecard } from './impactMetrics.ts';
+import { recentAnalyses, vertexAiModels, processMultimodalAnalysis } from './multimodalVision.ts';
 import {
   RiskLevel,
   TimelineStep,
@@ -840,3 +841,82 @@ apiRouter.get('/judge/scorecard', (req: Request, res: Response) => {
   const scorecard = getJudgeScorecard();
   res.json(scorecard);
 });
+
+// ==========================================
+// VISION & MULTIMODAL INTELLIGENCE (CODE FOR COMMUNITIES 2.0)
+// ==========================================
+apiRouter.get('/multimodal/recent', (req: Request, res: Response) => {
+  res.json(recentAnalyses);
+});
+
+apiRouter.post('/multimodal/analyze', async (req: Request, res: Response) => {
+  try {
+    const { imageBase64, mimeType, analysisType, location, phcId } = req.body;
+    const result = await processMultimodalAnalysis({
+      imageBase64,
+      mimeType,
+      analysisType: analysisType || 'citizen_hazard',
+      location,
+      phcId
+    });
+
+    db.auditLogs.unshift({
+      id: `log-${Date.now().toString().slice(-6)}`,
+      timestamp: new Date().toISOString(),
+      user: 'citizen_multimodal_vision',
+      role: 'DISTRICT_AUTHORITY',
+      action: 'MULTIMODAL_VISION_ANALYSIS',
+      entityType: 'VISION_INFERENCE',
+      entityId: result.id,
+      status: 'SUCCESS',
+      details: `${result.title} processed via ${result.vertexAiVisionMetadata.modelType}. Hazard Score: ${result.hazardScore}/100. Work order ${result.dispatchWorkOrder?.orderId} dispatched to ${result.dispatchWorkOrder?.department}.`,
+      ipAddress: req.ip || '10.0.1.5'
+    });
+
+    res.json(result);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Failed to process multimodal analysis', details: err?.message });
+  }
+});
+
+// ==========================================
+// VERTEX AI PREDICTIVE MODELING & PIPELINES
+// ==========================================
+apiRouter.get('/vertex-ai/models', (req: Request, res: Response) => {
+  res.json(vertexAiModels);
+});
+
+apiRouter.post('/vertex-ai/simulate-retraining', (req: Request, res: Response) => {
+  const { modelId } = req.body;
+  const model = vertexAiModels.find((m) => m.id === modelId) || vertexAiModels[0];
+
+  model.status = 'RETRAINING';
+  model.lastEvaluated = 'Retraining Pipeline Triggered...';
+
+  setTimeout(() => {
+    model.status = 'SERVING';
+    model.lastEvaluated = 'Just now (Canary Deployed)';
+    model.driftStatus = 'STABLE';
+  }, 4000);
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: 'vertex_ai_orchestrator',
+    role: 'ADMIN',
+    action: 'VERTEX_AI_PIPELINE_RETRAINING_TRIGGERED',
+    entityType: 'MODEL_REGISTRY',
+    entityId: model.id,
+    status: 'SUCCESS',
+    details: `Triggered Vertex AI automated training pipeline for ${model.name}. Endpoint ${model.endpointId} updated with dataset versioning.`,
+    ipAddress: req.ip || '10.0.1.5'
+  });
+
+  res.json({
+    success: true,
+    message: `Vertex AI custom retraining pipeline launched for ${model.name}`,
+    pipelineJobId: `job-vertex-${Date.now().toString().slice(-8)}`,
+    targetEndpoint: model.endpointId
+  });
+});
+

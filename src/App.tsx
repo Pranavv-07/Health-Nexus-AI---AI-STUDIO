@@ -22,6 +22,8 @@ import { AuditLogView } from './views/AuditLogView.tsx';
 import { SystemArchitectureView } from './views/SystemArchitectureView.tsx';
 import { DemoControlCenterView } from './views/DemoControlCenterView.tsx';
 import { SettingsView } from './views/SettingsView.tsx';
+import { CommunityVisionView } from './views/CommunityVisionView.tsx';
+import { VertexPredictiveView } from './views/VertexPredictiveView.tsx';
 import { ErrorBoundary } from './components/common/ErrorBoundary.tsx';
 import { Menu, Sparkles, X } from 'lucide-react';
 
@@ -67,6 +69,10 @@ const MainContent: React.FC = () => {
         return <SystemArchitectureView />;
       case 'demoControlCenter':
         return <DemoControlCenterView />;
+      case 'communityVision':
+        return <CommunityVisionView />;
+      case 'vertexPredictive':
+        return <VertexPredictiveView />;
       case 'settings':
         return <SettingsView />;
       default:

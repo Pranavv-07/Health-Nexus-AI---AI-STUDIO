@@ -5,6 +5,7 @@ import {
   AlertTriangle,
   Bot,
   Building2,
+  Camera,
   CheckSquare,
   ChevronRight,
   Cpu,
@@ -47,6 +48,7 @@ export const Navbar: React.FC = () => {
       groupName: t.navGroups.predictiveAi,
       views: [
         { id: 'forecasts', label: t.nav.forecasts, icon: TrendingUp },
+        { id: 'vertexPredictive', label: 'Vertex AI Hub', icon: Cpu, badge: 'AutoML' },
         { id: 'whatIfSimulator', label: t.nav.whatIfSimulator, icon: SlidersHorizontal },
         { id: 'emergencyCascade', label: t.nav.emergencyCascade, icon: GitBranch }
       ]
@@ -66,6 +68,7 @@ export const Navbar: React.FC = () => {
     {
       groupName: t.navGroups.federatedAi,
       views: [
+        { id: 'communityVision', label: 'Vision & Multimodal', icon: Camera, badge: 'VISION' },
         { id: 'federatedIntelligence', label: t.nav.federatedIntelligence, icon: Network },
         { id: 'aiCopilot', label: t.nav.aiCopilot, icon: Bot },
         { id: 'aiBriefing', label: t.nav.aiBriefing, icon: Sparkles }

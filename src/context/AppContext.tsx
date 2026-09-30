@@ -21,6 +21,8 @@ export type ActiveView =
   | 'auditLog'
   | 'systemArchitecture'
   | 'demoControlCenter'
+  | 'communityVision'
+  | 'vertexPredictive'
   | 'settings';
 
 interface AppContextType {

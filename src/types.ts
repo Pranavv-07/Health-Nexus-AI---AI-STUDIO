@@ -770,3 +770,63 @@ export interface JudgeScorecard {
   wasteAvoidedInr: number;
   resilienceGainPoints: number;
 }
+
+// ==========================================
+// MULTIMODAL VISION & VERTEX AI PREDICTIVE INTELLIGENCE
+// ==========================================
+export type MultimodalAnalysisType = 'citizen_hazard' | 'crop_disease' | 'pollution_monitoring';
+
+export interface MultimodalAnalysisResult {
+  id: string;
+  analysisType: MultimodalAnalysisType;
+  title: string;
+  timestamp: string;
+  location: string;
+  phcId?: string;
+  phcName?: string;
+  severity: RiskLevel;
+  hazardScore: number; // 0-100
+  confidenceScore: number; // 0-1
+  detectedEntities: string[];
+  findingsSummary: string;
+  impactAssessment: {
+    communityHealthRisk: string;
+    projectedOpdSurgePercent: number;
+    recommendedPhcPrep: string;
+    affectedPopulationEst: number;
+  };
+  vertexAiVisionMetadata: {
+    endpointId: string;
+    modelName: string;
+    modelType: 'Vertex AI Vision' | 'Gemini 3.8 Flash Multimodal' | 'Edge TPU Object Detection';
+    latencyMs: number;
+    processedBy: string;
+  };
+  actionableInterventions: string[];
+  dispatchWorkOrder?: {
+    orderId: string;
+    department: string;
+    priority: 'URGENT' | 'HIGH' | 'NORMAL';
+    assignedTeam: string;
+    actionItems: string[];
+  };
+}
+
+export interface VertexAiModelInfo {
+  id: string;
+  name: string;
+  category: 'AutoML Forecasting' | 'Custom Tabular DeepAR' | 'Vertex AI Vision' | 'LLM & Multimodal Serving';
+  endpointId: string;
+  deployedRevision: string;
+  datasetSize: string;
+  trainingFramework: string;
+  status: 'SERVING' | 'RETRAINING' | 'OPTIMIZING';
+  latencyMs: number;
+  accuracyMetricName: string;
+  accuracyMetricValue: string;
+  driftStatus: 'STABLE' | 'MINOR_DRIFT' | 'EVALUATING';
+  lastEvaluated: string;
+  featuresUsed: string[];
+  description: string;
+}
+
