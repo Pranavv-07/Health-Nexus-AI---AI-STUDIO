@@ -1,0 +1,7 @@
+{
+  "name": "Health-Nexus AI",
+  "description": "Federated AI for Predictive Healthcare Resource Intelligence. SEE. PREDICT. WARN. ACT. LEARN.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
