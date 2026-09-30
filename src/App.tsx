@@ -22,6 +22,7 @@ import { AuditLogView } from './views/AuditLogView.tsx';
 import { SystemArchitectureView } from './views/SystemArchitectureView.tsx';
 import { DemoControlCenterView } from './views/DemoControlCenterView.tsx';
 import { SettingsView } from './views/SettingsView.tsx';
+import { ErrorBoundary } from './components/common/ErrorBoundary.tsx';
 import { Menu, Sparkles, X } from 'lucide-react';
 
 const MainContent: React.FC = () => {
@@ -113,8 +114,10 @@ const MainContent: React.FC = () => {
 
 export default function App() {
   return (
-    <AppProvider>
-      <MainContent />
-    </AppProvider>
+    <ErrorBoundary>
+      <AppProvider>
+        <MainContent />
+      </AppProvider>
+    </ErrorBoundary>
   );
 }
