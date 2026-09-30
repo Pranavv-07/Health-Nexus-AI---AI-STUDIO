@@ -1,14 +1,32 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
-import {defineConfig} from 'vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcss()],
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, '.'),
+        '@': path.resolve(import.meta.dirname || process.cwd(), '.'),
+      },
+    },
+    build: {
+      chunkSizeWarningLimit: 2500,
+      rollupOptions: {
+        onwarn(warning, warn) {
+          if (warning.code === 'UNRESOLVED_IMPORT') return;
+          warn(warning);
+        },
+      },
+      // Vite 8 / Rolldown support
+      rolldownOptions: {
+        onLog(level: any, log: any, handler: any) {
+          if (log?.code === 'UNRESOLVED_IMPORT') return;
+          if (typeof handler === 'function') {
+            handler(level, log);
+          }
+        },
       },
     },
     server: {
