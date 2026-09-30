@@ -14,6 +14,7 @@ import {
   CheckCircle,
   CheckSquare,
   Clock,
+  Cpu,
   Flame,
   Hospital,
   Package,
@@ -96,6 +97,14 @@ export const OverviewDashboard: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <button
+              onClick={() => setActiveView('digitalTwin')}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-cyan-950/80 hover:bg-cyan-900/80 text-cyan-300 border border-cyan-500/40 shadow-md transition-colors"
+            >
+              <Cpu className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <span>{t.nav.digitalTwin}</span>
+            </button>
+
             <button
               onClick={() => setActiveView('demoControlCenter')}
               className="flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors shadow-md"

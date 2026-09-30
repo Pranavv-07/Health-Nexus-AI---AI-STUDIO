@@ -10,6 +10,8 @@ import {
   ResourceForecast,
   ResourceItem,
   SystemIntegrationStatus,
+  TimelineStep,
+  DigitalTwinSnapshot,
   UserRole,
   WhatIfScenarioInput,
   WhatIfSimulationResult
@@ -190,3 +192,9 @@ export async function generateBriefing(role: string, jurisdiction?: string) {
   });
   return res.json();
 }
+
+export async function fetchDigitalTwinSnapshot(step: TimelineStep = 'TODAY'): Promise<DigitalTwinSnapshot> {
+  const res = await fetch(`${API_BASE}/digital-twin?step=${step}`);
+  return res.json();
+}
+

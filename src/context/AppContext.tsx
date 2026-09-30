@@ -4,6 +4,7 @@ import { Language, translations } from '../locales/translations.ts';
 
 export type ActiveView =
   | 'overview'
+  | 'digitalTwin'
   | 'phcNetwork'
   | 'phcDetail'
   | 'resourceIntelligence'
@@ -25,6 +26,7 @@ export type ActiveView =
 interface AppContextType {
   role: UserRole;
   setRole: (r: UserRole) => void;
+  switchLoginRole: (r: UserRole) => void;
   language: Language;
   setLanguage: (l: Language) => void;
   t: typeof translations.en;
@@ -72,6 +74,34 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }, 4000);
   };
 
+  const switchLoginRole = (newRole: UserRole) => {
+    setRole(newRole);
+    switch (newRole) {
+      case 'PHC_STAFF':
+        setActiveView('phcDetail');
+        showDemoToast('Logged in as Hospital Medical Officer — Local Facility Telemetry Screen');
+        break;
+      case 'DISTRICT_AUTHORITY':
+        setActiveView('overview');
+        showDemoToast('Logged in as District Health Officer — District Command & Mutual-Aid Screen');
+        break;
+      case 'STATE_AUTHORITY':
+        setActiveView('digitalTwin');
+        showDemoToast('Logged in as State Health Commissioner — Healthcare Digital Twin & Network Screen');
+        break;
+      case 'NATIONAL_AUTHORITY':
+        setActiveView('federatedIntelligence');
+        showDemoToast('Logged in as National Health Mission Lead — Federated Learning & Policy Screen');
+        break;
+      case 'ADMIN':
+        setActiveView('demoControlCenter');
+        showDemoToast('Logged in as System Administrator — Full Audit & Demo Control Center');
+        break;
+      default:
+        setActiveView('overview');
+    }
+  };
+
   useEffect(() => {
     // Probe backend status on mount
     fetch('/api/status')
@@ -94,6 +124,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         role,
         setRole,
+        switchLoginRole,
         language,
         setLanguage,
         t,

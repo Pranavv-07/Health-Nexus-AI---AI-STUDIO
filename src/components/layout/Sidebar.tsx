@@ -7,6 +7,7 @@ import {
   BrainCircuit,
   Building2,
   CheckSquare,
+  Cpu,
   FileText,
   GitBranch,
   Gauge,
@@ -41,6 +42,13 @@ export const Sidebar: React.FC<{ isOpen: boolean; onClose: () => void }> = ({ is
       heading: t.navGroups.commandHospitals,
       items: [
         { id: 'overview', label: t.nav.overview, icon: LayoutDashboard },
+        {
+          id: 'digitalTwin',
+          label: t.nav.digitalTwin,
+          icon: Cpu,
+          badge: 'TWIN',
+          badgeColor: 'bg-cyan-500'
+        },
         { id: 'phcNetwork', label: t.nav.phcNetwork, icon: Building2 },
         { id: 'resourceIntelligence', label: t.nav.resourceIntelligence, icon: Layers }
       ]

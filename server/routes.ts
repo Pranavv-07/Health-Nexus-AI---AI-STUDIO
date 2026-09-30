@@ -12,9 +12,29 @@ import {
   askHealthNexus,
   generateExecutiveBriefing,
   explainWhatIfScenario,
-  isGeminiConnected
+  isGeminiConnected,
+  askIncidentCopilot
 } from './gemini.ts';
-import { RiskLevel, UserRole, WhatIfScenarioInput, WhatIfSimulationResult } from '../src/types.ts';
+import { getDigitalTwinSnapshot } from './digitalTwin.ts';
+import { runMultiObjectiveAllocation } from './resourceOptimizer.ts';
+import { simulateLogisticsTransfer } from './logistics.ts';
+import { getMedicineBatches, getExpiryAwareRedistributionProposals, getResourceCircularitySummary } from './wasteIntelligence.ts';
+import { calculateFacilityResilience, getAllResilienceScores, getDistrictResilienceSummaries } from './resilienceScore.ts';
+import { getEquityMetrics } from './equityIntelligence.ts';
+import { runPolicySimulation } from './policySimulator.ts';
+import { getAiSystemHealth } from './aiSentinel.ts';
+import { getEdgeNodeState, setEdgeConnectivity, addEdgeOfflineAction, triggerEdgeSynchronization } from './edgeNode.ts';
+import { getActiveIncident, updateIncidentActionStatus, generateIncidentPostMortem } from './incidentCommander.ts';
+import { getCommunityImpactMetrics, getJudgeScorecard } from './impactMetrics.ts';
+import {
+  RiskLevel,
+  TimelineStep,
+  UserRole,
+  VehicleType,
+  RoadCondition,
+  WhatIfScenarioInput,
+  WhatIfSimulationResult
+} from '../src/types.ts';
 
 export const apiRouter = Router();
 
@@ -592,4 +612,231 @@ apiRouter.post('/ai/briefing', async (req: Request, res: Response) => {
   });
 
   res.json(briefing);
+});
+
+// ==========================================
+// FEATURE 1: HEALTHCARE DIGITAL TWIN
+// ==========================================
+apiRouter.get('/digital-twin', (req: Request, res: Response) => {
+  const step = (req.query.step as TimelineStep) || 'TODAY';
+  const snapshot = getDigitalTwinSnapshot(step);
+  res.json(snapshot);
+});
+
+// ==========================================
+// FEATURE 2: AI RESOURCE ALLOCATION OPTIMIZER
+// ==========================================
+apiRouter.post('/optimizer/run', (req: Request, res: Response) => {
+  const customWeights = req.body.weights;
+  const plan = runMultiObjectiveAllocation(customWeights);
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: (req.body.user as string) || 'system.optimizer',
+    role: (req.body.role as UserRole) || 'DISTRICT_AUTHORITY',
+    action: 'RESOURCE_OPTIMIZATION_SOLVED',
+    entityType: 'OPTIMIZATION_PLAN',
+    entityId: plan.id,
+    status: 'SUCCESS',
+    details: `Multi-objective network allocation: ${plan.allocations.length} transfers allocated (${plan.afterMetrics.shortageReductionPercent}% shortage reduction).`,
+    ipAddress: req.ip || '10.0.1.5'
+  });
+
+  res.json(plan);
+});
+
+// ==========================================
+// FEATURE 3: LAST-MILE LOGISTICS INTELLIGENCE
+// ==========================================
+apiRouter.post('/logistics/simulate', (req: Request, res: Response) => {
+  const { originId, destinationId, resourceName, quantity, vehicleType, roadCondition } = req.body;
+  const detail = simulateLogisticsTransfer(
+    originId || 'phc-ap-02',
+    destinationId || 'phc-ap-01',
+    resourceName || 'ORS & Rehydration Salts',
+    quantity || 500,
+    (vehicleType as VehicleType) || 'TEMPERATURE_CONTROLLED_VAN',
+    (roadCondition as RoadCondition) || 'NORMAL'
+  );
+  res.json(detail);
+});
+
+// ==========================================
+// FEATURE 4: MEDICINE EXPIRY + WASTE INTELLIGENCE
+// ==========================================
+apiRouter.get('/waste/batches', (req: Request, res: Response) => {
+  const batches = getMedicineBatches();
+  res.json(batches);
+});
+
+apiRouter.get('/waste/proposals', (req: Request, res: Response) => {
+  const proposals = getExpiryAwareRedistributionProposals();
+  res.json(proposals);
+});
+
+apiRouter.get('/waste/circularity', (req: Request, res: Response) => {
+  const circularity = getResourceCircularitySummary();
+  res.json(circularity);
+});
+
+// ==========================================
+// FEATURE 5: HEALTHCARE RESILIENCE SCORE
+// ==========================================
+apiRouter.get('/resilience/facility/:id', (req: Request, res: Response) => {
+  const score = calculateFacilityResilience(req.params.id);
+  res.json(score);
+});
+
+apiRouter.get('/resilience/all', (req: Request, res: Response) => {
+  const scores = getAllResilienceScores();
+  res.json(scores);
+});
+
+apiRouter.get('/resilience/districts', (req: Request, res: Response) => {
+  const summaries = getDistrictResilienceSummaries();
+  res.json(summaries);
+});
+
+// ==========================================
+// FEATURE 6: HEALTHCARE EQUITY INTELLIGENCE
+// ==========================================
+apiRouter.get('/equity', (req: Request, res: Response) => {
+  const metrics = getEquityMetrics();
+  res.json(metrics);
+});
+
+// ==========================================
+// FEATURE 7: COUNTERFACTUAL POLICY SIMULATOR
+// ==========================================
+apiRouter.post('/policy/simulate', (req: Request, res: Response) => {
+  const scenarios = req.body.scenarios;
+  const report = runPolicySimulation(scenarios);
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: (req.body.user as string) || 'system.policy_sim',
+    role: (req.body.role as UserRole) || 'STATE_AUTHORITY',
+    action: 'POLICY_SIMULATION_EXECUTED',
+    entityType: 'POLICY_SIMULATOR',
+    entityId: 'COUNTERFACTUAL_RUN',
+    status: 'SUCCESS',
+    details: `Tested ${report.scenarios.length} strategic intervention policies against current baseline.`,
+    ipAddress: req.ip || '10.0.1.5'
+  });
+
+  res.json(report);
+});
+
+// ==========================================
+// FEATURE 8: AI MODEL + DATA DRIFT SENTINEL
+// ==========================================
+apiRouter.get('/sentinel', (req: Request, res: Response) => {
+  const health = getAiSystemHealth();
+  res.json(health);
+});
+
+// ==========================================
+// FEATURE 9: EDGE + OFFLINE PHC MODE
+// ==========================================
+apiRouter.get('/edge/:id', (req: Request, res: Response) => {
+  const data = getEdgeNodeState(req.params.id);
+  res.json(data);
+});
+
+apiRouter.post('/edge/connectivity', (req: Request, res: Response) => {
+  const { status } = req.body;
+  const result = setEdgeConnectivity(status);
+  res.json(result);
+});
+
+apiRouter.post('/edge/action', (req: Request, res: Response) => {
+  const action = addEdgeOfflineAction(req.body);
+  res.json(action);
+});
+
+apiRouter.post('/edge/sync', (req: Request, res: Response) => {
+  const syncResult = triggerEdgeSynchronization();
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: (req.body.user as string) || 'phc.edge_sync',
+    role: 'PHC_STAFF',
+    action: 'EDGE_SYNCHRONIZATION_COMPLETED',
+    entityType: 'EDGE_NODE',
+    entityId: req.body.phcId || 'phc-ap-01',
+    status: 'SUCCESS',
+    details: `Edge node uploaded ${syncResult.syncedCount} queued operational logs without conflict.`,
+    ipAddress: req.ip || '192.168.1.14'
+  });
+
+  res.json(syncResult);
+});
+
+// ==========================================
+// FEATURE 10: AI EMERGENCY INCIDENT COMMANDER
+// ==========================================
+apiRouter.get('/incident/active', (req: Request, res: Response) => {
+  const incident = getActiveIncident();
+  res.json(incident);
+});
+
+apiRouter.post('/incident/action', (req: Request, res: Response) => {
+  const { actionId, status } = req.body;
+  const updated = updateIncidentActionStatus(actionId, status);
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: (req.body.user as string) || 'incident.commander',
+    role: (req.body.role as UserRole) || 'DISTRICT_AUTHORITY',
+    action: 'INCIDENT_ACTION_UPDATED',
+    entityType: 'INCIDENT_ACTION',
+    entityId: actionId,
+    status: 'SUCCESS',
+    details: `Incident Action #${actionId} updated to status "${status}".`,
+    ipAddress: req.ip || '10.0.1.5'
+  });
+
+  res.json(updated);
+});
+
+apiRouter.post('/incident/copilot', async (req: Request, res: Response) => {
+  const query = (req.body.query as string) || '';
+  const answer = await askIncidentCopilot(query);
+  res.json({ query, answer, timestamp: new Date().toISOString() });
+});
+
+apiRouter.post('/incident/post-mortem', (req: Request, res: Response) => {
+  const postMortem = generateIncidentPostMortem();
+
+  db.auditLogs.unshift({
+    id: `log-${Date.now().toString().slice(-6)}`,
+    timestamp: new Date().toISOString(),
+    user: (req.body.user as string) || 'incident.post_mortem',
+    role: 'STATE_AUTHORITY',
+    action: 'INCIDENT_POST_MORTEM_GENERATED',
+    entityType: 'INCIDENT_REPORT',
+    entityId: postMortem.incidentId,
+    status: 'SUCCESS',
+    details: `Post-Mortem for ${postMortem.incidentId}: ${postMortem.shortagesPreventedCount} shortages prevented, ₹${postMortem.wastageAvoidedInr.toLocaleString()} waste avoided.`,
+    ipAddress: req.ip || '10.0.1.5'
+  });
+
+  res.json(postMortem);
+});
+
+// ==========================================
+// COMMUNITY IMPACT & JUDGE SCORECARD
+// ==========================================
+apiRouter.get('/impact', (req: Request, res: Response) => {
+  const metrics = getCommunityImpactMetrics();
+  res.json(metrics);
+});
+
+apiRouter.get('/judge/scorecard', (req: Request, res: Response) => {
+  const scorecard = getJudgeScorecard();
+  res.json(scorecard);
 });

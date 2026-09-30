@@ -4,6 +4,7 @@ import { Header } from './components/layout/Header.tsx';
 import { Sidebar } from './components/layout/Sidebar.tsx';
 import { Navbar } from './components/layout/Navbar.tsx';
 import { OverviewDashboard } from './views/OverviewDashboard.tsx';
+import { DigitalTwinView } from './views/DigitalTwinView.tsx';
 import { PhcNetworkView } from './views/PhcNetworkView.tsx';
 import { PhcDetailView } from './views/PhcDetailView.tsx';
 import { ResourceIntelligenceView } from './views/ResourceIntelligenceView.tsx';
@@ -31,6 +32,8 @@ const MainContent: React.FC = () => {
     switch (activeView) {
       case 'overview':
         return <OverviewDashboard />;
+      case 'digitalTwin':
+        return <DigitalTwinView />;
       case 'phcNetwork':
         return <PhcNetworkView />;
       case 'phcDetail':

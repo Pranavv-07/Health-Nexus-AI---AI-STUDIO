@@ -7,6 +7,7 @@ import {
   Building2,
   CheckSquare,
   ChevronRight,
+  Cpu,
   GitBranch,
   Gauge,
   History,
@@ -37,6 +38,7 @@ export const Navbar: React.FC = () => {
       groupName: t.navGroups.commandHospitals,
       views: [
         { id: 'overview', label: t.nav.overview, icon: LayoutDashboard },
+        { id: 'digitalTwin', label: t.nav.digitalTwin, icon: Cpu, badge: 'TWIN' },
         { id: 'phcNetwork', label: t.nav.phcNetwork, icon: Building2 },
         { id: 'resourceIntelligence', label: t.nav.resourceIntelligence, icon: Layers }
       ]

@@ -349,3 +349,37 @@ The surge triggers concurrent pressure across all tiers: an aggregate deficit of
 2. Activate district-level emergency bed reserve protocols and deploy mobile telemedicine triage units to tribal centers.
 3. Expedite emergency procurement bypass for critical oral rehydration and IV fluid supplies.`;
 }
+
+export async function askIncidentCopilot(userQuestion: string): Promise<string> {
+  if (ai) {
+    try {
+      const prompt = `You are Health-Nexus Incident Commander Copilot. An active emergency incident FLOOD-CYCLONE-2026-001 is underway affecting 7 coastal healthcare nodes across Andhra Pradesh and Odisha with a +42% patient surge.
+Answer the following query concisely and authoritatively with operational directives:
+Question: "${userQuestion}"`;
+
+      const response = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: prompt,
+      });
+
+      return response.text || '';
+    } catch (e) {
+      console.warn('Incident Copilot Gemini call failed:', e);
+    }
+  }
+
+  const q = userQuestion.toLowerCase();
+  if (q.includes('unresolved') || q.includes('urgent')) {
+    return 'The most urgent unresolved issue is Action #ACT-01: Transfer of 600 ORS units from New GGH Vijayawada to GGH Guntur awaiting District Health Officer approval. Stockout horizon is under 44 hours.';
+  }
+  if (q.includes('exposed') || q.includes('vulnerable')) {
+    return 'The most exposed facilities are GGH Guntur (acute diarrheal surge +42%, 95% bed capacity) and DHH Puri (coastal flood surge + cholera spike requiring 8 auxiliary cots).';
+  }
+  if (q.includes('route') || q.includes('road')) {
+    return 'If primary NH-16 highway experiences flooding near Krishna River bridge, Route B (State Highway Ridge Bypass, 46 km, ~58 min transit) is verified open and recommended for ambulance transfer.';
+  }
+  if (q.includes('summarize') || q.includes('state')) {
+    return 'Incident Executive Summary for State Commissioner: Severe coastal cyclone active. 7 tertiary/district centers impacted. Multi-objective allocation has matched 1,850 surplus units across 4 corridors. 2 actions completed, 3 in progress. No clinical stockouts have occurred.';
+  }
+  return 'Incident Command Status: Active monitoring across 7 facilities. Sourcing 600 ORS units from Vijayawada and 500 IV fluid units from Cuttack. All secondary logistics corridors remain green. Emergency response time stands at 74 minutes.';
+}

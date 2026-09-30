@@ -22,6 +22,7 @@ export interface TranslationsSchema {
   };
   nav: {
     overview: string;
+    digitalTwin: string;
     phcNetwork: string;
     phcDetail: string;
     resourceIntelligence: string;
@@ -77,6 +78,29 @@ export interface TranslationsSchema {
     roadmap: string;
     contactSuperintendent: string;
     surplusCorridor: string;
+  };
+  digitalTwin: {
+    title: string;
+    subtitle: string;
+    timeline: string;
+    shortageIndex: string;
+    resilienceScore: string;
+    activeCorridors: string;
+    riskPropagation: string;
+    networkOverview: string;
+    nodeInspection: string;
+    currentState: string;
+    predictedState: string;
+    resourceState: string;
+    riskState: string;
+    footfall: string;
+    bedOccupancy: string;
+    staffAvailable: string;
+    weather: string;
+    diseaseSurge: string;
+    inspectNode: string;
+    simulateTransfer: string;
+    propagationEpicenter: string;
   };
   common: {
     search: string;
@@ -158,6 +182,7 @@ export const translations: Record<Language, TranslationsSchema> = {
     },
     nav: {
       overview: 'Command Center',
+      digitalTwin: 'Healthcare Digital Twin',
       phcNetwork: 'Hospital Network & Map',
       phcDetail: 'Facility Telemetry',
       resourceIntelligence: 'Resource Inventory',
@@ -213,6 +238,29 @@ export const translations: Record<Language, TranslationsSchema> = {
       roadmap: 'Roadmap',
       contactSuperintendent: 'Medical Superintendent',
       surplusCorridor: 'Mutual Aid Transport Corridor'
+    },
+    digitalTwin: {
+      title: 'Healthcare Digital Twin Operating System',
+      subtitle: 'Live simulated representation of the national healthcare network, resource flows, and risk propagation',
+      timeline: 'Digital Twin Timeline Horizon',
+      shortageIndex: 'Network Shortage Index',
+      resilienceScore: 'Network Resilience Score',
+      activeCorridors: 'Active Resource Corridors',
+      riskPropagation: 'Risk Propagation Wavefront',
+      networkOverview: 'Network Topology & Resource Dynamics',
+      nodeInspection: 'Facility Node Telemetry',
+      currentState: 'Current Operational State',
+      predictedState: 'Projected Horizon State',
+      resourceState: 'Critical Resource Stock State',
+      riskState: 'Systemic Vulnerability & Risk',
+      footfall: 'Daily Patient Footfall',
+      bedOccupancy: 'Bed Capacity & Occupancy',
+      staffAvailable: 'Available Clinical Staff',
+      weather: 'Atmospheric Condition',
+      diseaseSurge: 'Outbreak Surge Vector',
+      inspectNode: 'Deep Facility Telemetry',
+      simulateTransfer: 'Trigger Route Simulation',
+      propagationEpicenter: 'Surge Epicenter (Coastal/Depression Zone)'
     },
     common: {
       search: 'Search hospitals, resources, or districts...',
@@ -292,6 +340,7 @@ export const translations: Record<Language, TranslationsSchema> = {
     },
     nav: {
       overview: 'कमांड सेंटर',
+      digitalTwin: 'हेल्थकेयर डिजिटल ट्विन',
       phcNetwork: 'अस्पताल नेटवर्क व नक्शा',
       phcDetail: 'अस्पताल विस्तृत विवरण',
       resourceIntelligence: 'संसाधन इन्वेंट्री',
@@ -347,6 +396,29 @@ export const translations: Record<Language, TranslationsSchema> = {
       roadmap: 'रोडमैप',
       contactSuperintendent: 'चिकित्सा अधीक्षक',
       surplusCorridor: 'पारस्परिक सहायता गलियारा'
+    },
+    digitalTwin: {
+      title: 'हेल्थकेयर डिजिटल ट्विन ऑपरेटिंग सिस्टम',
+      subtitle: 'राष्ट्रीय स्वास्थ्य नेटवर्क, संसाधन प्रवाह और जोखिम प्रसार का सजीव सिमुलेटेड निरूपण',
+      timeline: 'डिजिटल ट्विन टाइमलाइन क्षितिज',
+      shortageIndex: 'नेटवर्क कमी सूचकांक',
+      resilienceScore: 'नेटवर्क लचीलापन स्कोर',
+      activeCorridors: 'सक्रिय संसाधन गलियारे',
+      riskPropagation: 'जोखिम प्रसार तरंग',
+      networkOverview: 'नेटवर्क टोपोलॉजी व संसाधन गतिशीलता',
+      nodeInspection: 'अस्पताल नोड टेलीमेट्री',
+      currentState: 'वर्तमान परिचालन स्थिति',
+      predictedState: 'अनुमानित क्षितिज स्थिति',
+      resourceState: 'महत्वपूर्ण संसाधन स्टॉक स्थिति',
+      riskState: 'प्रणालीगत भेद्यता व जोखिम',
+      footfall: 'दैनिक रोगी आवक',
+      bedOccupancy: 'बिस्तर क्षमता व अधिभोग',
+      staffAvailable: 'उपलब्ध चिकित्सा कर्मी',
+      weather: 'वायुमंडलीय स्थिति',
+      diseaseSurge: 'प्रकोप वृद्धि वेक्टर',
+      inspectNode: 'गहन टेलीमेट्री देखें',
+      simulateTransfer: 'रूट सिमुलेशन चलाएँ',
+      propagationEpicenter: 'प्रसार उपरिकेंद्र (तटीय/अवसाद क्षेत्र)'
     },
     common: {
       search: 'अस्पताल, दवा या जिला खोजें...',
@@ -426,6 +498,7 @@ export const translations: Record<Language, TranslationsSchema> = {
     },
     nav: {
       overview: 'కమాండ్ సెంటర్',
+      digitalTwin: 'హెల్త్‌కేర్ డిజిటల్ ట్విన్',
       phcNetwork: 'ఆసుపత్రుల నెట్‌వర్క్ & మ్యాప్',
       phcDetail: 'ఆసుపత్రి టెలిమెట్రీ',
       resourceIntelligence: 'వనరుల ఇన్వెంటరీ',
@@ -481,6 +554,29 @@ export const translations: Record<Language, TranslationsSchema> = {
       roadmap: 'రోడ్‌మ్యాప్',
       contactSuperintendent: 'మెడికల్ సూపరింటెండెంట్',
       surplusCorridor: 'పరస్పర సహాయ రవాణా కారిడార్'
+    },
+    digitalTwin: {
+      title: 'హెల్త్‌కేర్ డిజిటల్ ట్విన్ ఆపరేటింగ్ సిస్టమ్',
+      subtitle: 'జాతీయ ఆరోగ్య నెట్‌వర్క్, వనరుల ప్రవాహం మరియు రిస్క్ వ్యాప్తి యొక్క ప్రత్యక్ష అనుకరణ ప్రాతినిధ్యం',
+      timeline: 'డిజిటల్ ట్విన్ టైమ్‌లైన్ క్షితిజం',
+      shortageIndex: 'నెట్‌వర్క్ కొరత సూచిక',
+      resilienceScore: 'నెట్‌వర్క్ రెసిలెన్స్ స్కోర్',
+      activeCorridors: 'క్రియాశీల వనరుల కారిడార్లు',
+      riskPropagation: 'రిస్క్ ప్రసరణ తరంగం',
+      networkOverview: 'నెట్‌వర్క్ టోపోలాజీ & వనరుల డైనమిక్స్',
+      nodeInspection: 'ఆసుపత్రి నోడ్ టెలిమెట్రీ',
+      currentState: 'ప్రస్తుత కార్యాచరణ స్థితి',
+      predictedState: 'అంచనా వేసిన స్థితి',
+      resourceState: 'క్లిష్టమైన వనరుల నిల్వ స్థితి',
+      riskState: 'వ్యవస్థాగత దుర్బలత్వం & రిస్క్',
+      footfall: 'రోజువారీ రోగుల సంఖ్య',
+      bedOccupancy: 'బెడ్ సామర్థ్యం & వినియోగం',
+      staffAvailable: 'అందుబాటులో ఉన్న వైద్య సిబ్బంది',
+      weather: 'వాతావరణ పరిస్థితి',
+      diseaseSurge: 'వ్యాధి వ్యాప్తి వేగం',
+      inspectNode: 'లోతైన టెలిమెట్రీని చూడండి',
+      simulateTransfer: 'రవాణా మార్గాన్ని అనుకరించండి',
+      propagationEpicenter: 'తీవ్ర వ్యాప్తి కేంద్రం (తీరప్రాంతం/వాతావరణ మార్పు)'
     },
     common: {
       search: 'ఆసుపత్రి, మందు లేదా జిల్లా పేరు శోధించండి...',
